@@ -1193,7 +1193,9 @@
             observer.observe(card);
         });
 
-        // Carousel functionality
+        // Carousel functionality - Synchronized by category
+        const carouselGroups = {};
+
         document.querySelectorAll('.project-carousel').forEach(carousel => {
             const images = carousel.querySelector('.carousel-images');
             const imageElements = carousel.querySelectorAll('.carousel-image');
@@ -1201,63 +1203,68 @@
             const prevArrow = carousel.querySelector('.carousel-arrow.prev');
             const nextArrow = carousel.querySelector('.carousel-arrow.next');
             let currentIndex = 0;
-            let autoPlayInterval;
-            let pauseCycles = 0;
+            let isHovered = false;
 
-            function goToSlide(index) {
-                currentIndex = index;
-                images.style.transform = `translateX(-${currentIndex * 100}%)`;
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentIndex);
-                });
+            // Determine category from parent section
+            const section = carousel.closest('section');
+            const category = section ? section.id : 'default';
+
+            // Initialize category group if not exists
+            if (!carouselGroups[category]) {
+                carouselGroups[category] = {
+                    carousels: [],
+                    interval: null
+                };
             }
 
-            function nextSlide() {
-                if (pauseCycles > 0) {
-                    pauseCycles--;
-                    return;
-                }
-                currentIndex = (currentIndex + 1) % dots.length;
-                goToSlide(currentIndex);
-            }
+            const carouselObj = {
+                element: carousel,
+                goToSlide: function(index) {
+                    currentIndex = index;
+                    images.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                },
+                nextSlide: function() {
+                    if (isHovered) return; // Skip if hovered
+                    currentIndex = (currentIndex + 1) % dots.length;
+                    this.goToSlide(currentIndex);
+                },
+                getCurrentIndex: function() {
+                    return currentIndex;
+                },
+                getDotsLength: function() {
+                    return dots.length;
+                },
+                category: category
+            };
 
-            function prevSlide() {
-                currentIndex = (currentIndex - 1 + dots.length) % dots.length;
-                goToSlide(currentIndex);
-            }
+            carouselGroups[category].carousels.push(carouselObj);
 
-            function startAutoPlay() {
-                autoPlayInterval = setInterval(nextSlide, 5000);
-            }
-
-            function stopAutoPlay() {
-                clearInterval(autoPlayInterval);
-            }
-
-            function manualNavigate(index) {
-                stopAutoPlay();
-                goToSlide(index);
-                pauseCycles = 5;
-                startAutoPlay();
-            }
+            // Hover state
+            carousel.addEventListener('mouseenter', () => { isHovered = true; });
+            carousel.addEventListener('mouseleave', () => { isHovered = false; });
 
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
-                    manualNavigate(index);
+                    carouselObj.goToSlide(index);
                 });
             });
 
             if (prevArrow) {
                 prevArrow.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    manualNavigate((currentIndex - 1 + dots.length) % dots.length);
+                    const newIndex = (carouselObj.getCurrentIndex() - 1 + carouselObj.getDotsLength()) % carouselObj.getDotsLength();
+                    carouselObj.goToSlide(newIndex);
                 });
             }
 
             if (nextArrow) {
                 nextArrow.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    manualNavigate((currentIndex + 1) % dots.length);
+                    const newIndex = (carouselObj.getCurrentIndex() + 1) % carouselObj.getDotsLength();
+                    carouselObj.goToSlide(newIndex);
                 });
             }
 
@@ -1268,11 +1275,17 @@
                     openLightbox(carousel, index);
                 });
             });
+        });
 
-            carousel.addEventListener('mouseenter', stopAutoPlay);
-            carousel.addEventListener('mouseleave', startAutoPlay);
+        // Start synchronized autoplay for each category
+        Object.keys(carouselGroups).forEach(category => {
+            const group = carouselGroups[category];
+            
+            function categoryNextSlide() {
+                group.carousels.forEach(c => c.nextSlide());
+            }
 
-            startAutoPlay();
+            group.interval = setInterval(categoryNextSlide, 10000);
         });
 
         // Lightbox functionality
