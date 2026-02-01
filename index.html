@@ -278,6 +278,149 @@
             border-radius: 5px;
         }
 
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: rgba(59, 130, 246, 0.8);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .project-carousel:hover .carousel-arrow {
+            opacity: 1;
+        }
+
+        .carousel-arrow:hover {
+            background: #3b82f6;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-arrow.prev {
+            left: 10px;
+        }
+
+        .carousel-arrow.next {
+            right: 10px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(59, 130, 246, 0.8);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .lightbox-close:hover {
+            background: #3b82f6;
+            transform: scale(1.1);
+        }
+
+        .lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(59, 130, 246, 0.8);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .lightbox-arrow:hover {
+            background: #3b82f6;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .lightbox-arrow.prev {
+            left: 20px;
+        }
+
+        .lightbox-arrow.next {
+            right: 20px;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 1rem;
+            background: rgba(59, 130, 246, 0.6);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
         .project-content {
             padding: 28px;
             flex: 1;
@@ -629,7 +772,18 @@
         <h2 class="section-title" data-i18n="projects.title">Projetos de Programação</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <img src="https://raw.githubusercontent.com/IvoAndre/PoliticaPT/refs/heads/main/public/images/PoliticaPT%20Horizontal%20Logo%20V2%20For%20Dark%20Mode.png" alt="PolíticaPT Logo" class="project-image">
+                <div class="project-carousel" data-carousel="politicapt">
+                    <div class="carousel-images">
+                        <img src="https://raw.githubusercontent.com/IvoAndre/PoliticaPT/refs/heads/main/public/images/PoliticaPT%20Horizontal%20Logo%20V2%20For%20Dark%20Mode.png" alt="PolíticaPT Logo" class="carousel-image">
+                        <img src="https://github.com/user-attachments/assets/f8e8c245-6259-4cf1-9636-a8c1c74053cb" alt="PolíticaPT Screenshot" class="carousel-image">
+                    </div>
+                    <button class="carousel-arrow prev"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="carousel-arrow next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="carousel-controls">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                    </div>
+                </div>
                 <div class="project-content">
                     <h3>PolíticaPT</h3>
                     <p data-i18n="projects.politicapt.desc">Projeto premiado com o Prémio Geração+ que visa democratizar o acesso à informação política em Portugal.</p>
@@ -646,7 +800,18 @@
             </div>
 
             <div class="project-card">
-                <img src="https://github.com/user-attachments/assets/ccff6501-e8d4-4e0c-9a0c-0c157384c4af" alt="PolíticaPT UnavailablePage Screenshot" class="project-image">
+                <div class="project-carousel" data-carousel="unavailable">
+                    <div class="carousel-images">
+                        <img src="https://github.com/user-attachments/assets/08010e28-b6ca-45fb-a0b5-60af9d72ce29" alt="PolíticaPT UnavailablePage Screenshot 1" class="carousel-image">
+                        <img src="https://github.com/user-attachments/assets/ccff6501-e8d4-4e0c-9a0c-0c157384c4af" alt="PolíticaPT UnavailablePage Screenshot 2" class="carousel-image">
+                    </div>
+                    <button class="carousel-arrow prev"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="carousel-arrow next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="carousel-controls">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                    </div>
+                </div>
                 <div class="project-content">
                     <h3>PolíticaPT - UnavailablePage</h3>
                     <p data-i18n="projects.unavailable.desc">Página de manutenção personalizada para o projeto PolíticaPT com design moderno e informativo.</p>
@@ -667,6 +832,8 @@
                         <img src="https://github.com/user-attachments/assets/0c49a6bf-66b6-4161-bf79-37cae05cf934" alt="VisuMaker Logo" class="carousel-image">
                         <img src="https://github.com/user-attachments/assets/629dfbf6-acf4-4893-ad4a-83f1279c9a57" alt="VisuMaker Screenshot" class="carousel-image">
                     </div>
+                    <button class="carousel-arrow prev"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="carousel-arrow next"><i class="fa-solid fa-chevron-right"></i></button>
                     <div class="carousel-controls">
                         <div class="carousel-dot active" data-index="0"></div>
                         <div class="carousel-dot" data-index="1"></div>
@@ -706,7 +873,7 @@
     <section id="hobbies">
         <h2 class="section-title" data-i18n="hobbies.title">Hobbies & Interesses</h2>
         
-        <h3 style="color: #60a5fa; font-size: 2rem; margin-top: 40px; margin-bottom: 30px; font-family: 'National Park', sans-serif;" data-i18n="hobbies.translations">Traduções Crowdin</h3>
+        <h3 style="color: #60a5fa; font-size: 2rem; margin-top: 40px; margin-bottom: 30px; font-family: 'National Park', sans-serif;" data-i18n="hobbies.translations">Traduções</h3>
         <div class="translation-grid">
             <div class="translation-card">
                 <div style="width: 80px; height: 80px; margin: 0 auto 20px;">
@@ -792,6 +959,17 @@
     <footer style="text-align: center; padding: 40px 20px 60px; position: relative; z-index: 1;">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 170" style="height: 80px; width: auto; fill: #3b82f6; opacity: 0.7;"><path d="M465.68,139.3c2.52,5.36,5.49,3.8,7.95,7.47.31.46-1.26,1.94-1.87,1.81-2.88-.62-6.81-3.31-8.97-5.78-6.07,3.87-9.36,9.22-16.96,4.36-3.52-2.25-6.42-.17-9.01-1.88-5.2-3.44,3.48-17.52,1.73-22.1l-13.92-3.57c-1.59,19.25-7.13,19.07-18.21,30.75-7.99,2.6-16.78-2.69-20.67-9.64-3.86,5.92-.94,5.55-9.41,10.33-4.02,2.27-8.08,1.1-12.13,1.25l-4.75.17c-1.23.04-2.54-2.59-2.43-3.95.39-4.98-.65-9.03-2.1-13.7-2.06-6.67-4.88-12.71-11.01-16.91-4.53-3.1-11.34-1.03-14.19,3.99-3.23,5.66-5.37,11.99-6.54,18.4-.31,1.69.63,3.03-2.76,4.27l.52-3.37-.49,3.28c-.09.62-2.43.59-2.57-.21-1.41-7.73-2.04-26.26-11.12-28.64-5.32-1.4-11.44.1-15.39,4-11.11,10.97-9.22,17.42-9.59,30.71-.03,1-1.74,3.08-2.37,2.42l-3.4-3.59c4.04-16.33,2.57-38.65,2.43-56.8-11.42,4.86-21.49,10.66-32.13,16.51-8.07,4.44-15.46,8.36-23.45,13.54-.63,6.12-1.17,14.16-1.27,19.75-.01.61,1.26,2.23.81,2.47l-1.81.99c-.56.31-1.66-1.44-1.61-2.16l.44-5.82.79-13.43c-4.85,3.42-9.26,6.87-13.63,10.87l-14.25,13.05.57,3.16c-1.26-.05-2.75-.97-2.98-1.84-.26-.99.53-2.87,1.25-3.52l12.63-11.45c5.2-4.71,10.81-9.06,16.57-13.24l6.05-31.57c1.9-9.92,5.51-18.96,8.55-28.55,3.66-11.54,11.69-34.69,20.84-41.91,4.7-3.71,10.18-2.09,13.75,2.09,4.91,5.73,6.84,12.68,8.27,20.14,1.93,10.05,3.05,19.85,3.51,30.08l.74,16.49,23.91-9.86c23.71-9.78,71.42-18.46,97.63-22.06,15.4-2.11,30.36-3.29,45.84-4.4,6.5-.47,12.79-1.65,19.63.25-7.38,2.35-14.55,1.31-21.91,2.06l-44.15,4.47c-18.42,1.86-35.82,5.9-53.95,9.63-22.41,4.61-45.84,12.73-66.73,22.41l.18,36.77c5.55-9.62,13.82-16.96,25.69-13.74,9.32,2.53,10.49,16.62,12.47,24.78,2.42-6.41,3.76-12.07,7.02-17.55,3.1-5.21,9.82-8.26,15.72-5.62,8.51,3.81,12.77,12.63,14.98,21.8,1.74-5.88,3.83-12.37,8.19-16.69,4.39-4.36,10.49-3.57,14.22.59,2.24,2.49,3.91,4.36,6.81,7.26l3.22-31.23c1.01-9.76,2.88-19.85,5.4-29.07,1.56-.22,2.63.59,3.1,1.3,1.35,2.02-1.91,2.83-2.13,3.91-4.11,21.04-7.2,42.44-6.89,64.08.1,6.72,10.15,10.87,15.37,10.3l9.32-8.41c5.55-5.01,7.11-12.56,7.02-20.03l-9.48-1.49c-.58-.09-1.81-.57-2.28-.9-.59-.42-.28-2.57.24-3.14,2.07-2.22,6.32-3.74,9.65-2.62,2.27.76,3.48,3.34,4.34,5.62l15.3,4.14c6.91,1.87-.71,16.88.15,21.43l6.46,1.76c6.05,4.71,9.23,1.27,14.65-3.09-3.2-5.59-7.6-14.71-1.81-19.4,2.94-2.38,10.05-2.2,12.89-.61,4.6,2.57-2.08,14.89-6.51,18.69ZM247.46,105.58c10.21-5.74,19.91-10.79,30.7-15.81l-.68-21.65c-.28-8.98-1.53-17.46-3.02-26.24-1.21-7.14-2.75-13.93-7.56-19.45-1.27-1.46-3.53-3.05-5.01-3.03-5.85.09-10.52,7.75-13.05,12.91-4.31,8.81-7.9,17.66-10.91,27.1-3.36,10.57-7.42,20.64-9.45,31.55l-5.24,28.2,24.21-13.6ZM375.09,148.05c3.82-2.34,7.01-6.19,8.91-10.02,1.35-2.71.68-6.23.41-9.28-2.48-3.4-4.85-6.75-8.65-8.73-2.29-1.19-6.07,1-7.33,3.13-3.76,6.31-5.37,12.95-6.41,20.11-1.57,7.83,7.95,7.93,13.07,4.8ZM463.93,137.41c4.39-4.4,7.5-8.58,7.36-14.91-2.52-.7-6.24-1.19-8.6-.19-3.43,1.46-3.11,6.24-1.79,8.93l3.02,6.16Z"/><path d="M174.42,142.53c-3.77,6.17-13.21,6.47-16.99,2.83-9.22-8.89-7.05-20.79-8.52-34.28l-12.47,1.19-8.45,18.57-4.95,15.1c-.43,1.32-2.4,2.89-3.54,2.98-6.02.47-5.37-17.91-5.76-23.99l-.63-9.9-39.18,9.59c-5.9,1.44-12.08,2.26-17.2,5.42-1.73,1.07-2.84,1.29-4.93,1.86-12.55,3.41-23.55,10.26-34.75,16.61-2.18,1.24-2.74,1.43-3.8,4.38-1.07-.54-2.52-2.65-2.41-3.79,3.54-1.78,6.75-3.44,10.11-5.46,9.17-5.54,18.74-9.96,28.52-13.83-4.62-6.48-4.08-23.72-3.4-30.9,1.37-14.63,2.58-28.44,2.66-43.69-7.49,2.09-13.68,5.25-20.51,8.31-8.25,3.7-14.92,9.18-23.33,13.97,5.75-8.99,16.03-12.46,24.84-17.07,13.39-7,27.18-10.71,42.29-12.46,34.09-3.94,29.79,1.27,27.01,1.08-12.62-.83-33.49,1.44-46.61,4.89.5,14.26-.02,27.28-1.46,41.16-.6,5.84-2.31,30.31,3.68,32.65,6.17-2.21,12.22-3.84,18.52-5.37l39.76-9.64c-.26-4.04-1.19-8.45-1.93-12.5-.86-4.7-.86-6.42-.75-9.92.02-.62,1.75-.6,2.44,0,.83,2.61,1.1,5.33,1.55,8.14.72,4.42,1.98,8.95,2.66,13.83l17.99-2.41c3.16-5.54,4.52-12.55,10.67-15.99-1.36,6.34-6.6,9.28-7.38,15.67l10.96-1.19c-.72-10.93.89-28.1,10.29-33.42,3.8-2.15,7.67-.33,10.46,2.48,16.98,17.12,16.65,45.24,4.53,65.1ZM178.61,121.39c5.4-24.06-10.92-49.51-18.29-44.37-8.63,6.01-9.4,21.5-8.95,31.5l7.55-.36c7.89-.38,14.02,6.2,11.67,8.03-2.14,1.67-4.48-5.26-9.3-5.32l-10.17-.12,2.63,22.09c1.71,7.2,6.84,12.12,14.67,10.39,5.26-2.88,8.91-16.07,10.2-21.83ZM119.68,145.36c3.21-5.63,3.94-11.21,6.43-16.58l7.51-16.19-16.69,2.03.87,15.6c.28,5.09.65,9.84,1.88,15.14Z"/><path d="M479.22,103.07c-.43.37-.95,2.02-1.28,1.92l-1.09-.33c-3.22-.99,14.56-16.14,18.05-16.5.51-.05,0,1.54-.44,1.9l-15.24,13.01Z"/></svg>
     </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightbox-close"><i class="fa-solid fa-xmark"></i></button>
+        <button class="lightbox-arrow prev" id="lightbox-prev"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="lightbox-content">
+            <img src="" alt="Lightbox Image" class="lightbox-image" id="lightbox-image">
+        </div>
+        <button class="lightbox-arrow next" id="lightbox-next"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="lightbox-counter" id="lightbox-counter">1 / 2</div>
+    </div>
 
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -1018,9 +1196,13 @@
         // Carousel functionality
         document.querySelectorAll('.project-carousel').forEach(carousel => {
             const images = carousel.querySelector('.carousel-images');
+            const imageElements = carousel.querySelectorAll('.carousel-image');
             const dots = carousel.querySelectorAll('.carousel-dot');
+            const prevArrow = carousel.querySelector('.carousel-arrow.prev');
+            const nextArrow = carousel.querySelector('.carousel-arrow.next');
             let currentIndex = 0;
             let autoPlayInterval;
+            let pauseCycles = 0;
 
             function goToSlide(index) {
                 currentIndex = index;
@@ -1031,23 +1213,59 @@
             }
 
             function nextSlide() {
+                if (pauseCycles > 0) {
+                    pauseCycles--;
+                    return;
+                }
                 currentIndex = (currentIndex + 1) % dots.length;
                 goToSlide(currentIndex);
             }
 
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + dots.length) % dots.length;
+                goToSlide(currentIndex);
+            }
+
             function startAutoPlay() {
-                autoPlayInterval = setInterval(nextSlide, 4000);
+                autoPlayInterval = setInterval(nextSlide, 5000);
             }
 
             function stopAutoPlay() {
                 clearInterval(autoPlayInterval);
             }
 
+            function manualNavigate(index) {
+                stopAutoPlay();
+                goToSlide(index);
+                pauseCycles = 5;
+                startAutoPlay();
+            }
+
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
-                    stopAutoPlay();
-                    goToSlide(index);
-                    startAutoPlay();
+                    manualNavigate(index);
+                });
+            });
+
+            if (prevArrow) {
+                prevArrow.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    manualNavigate((currentIndex - 1 + dots.length) % dots.length);
+                });
+            }
+
+            if (nextArrow) {
+                nextArrow.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    manualNavigate((currentIndex + 1) % dots.length);
+                });
+            }
+
+            // Image click to open lightbox
+            imageElements.forEach((img, index) => {
+                img.style.cursor = 'pointer';
+                img.addEventListener('click', () => {
+                    openLightbox(carousel, index);
                 });
             });
 
@@ -1055,6 +1273,62 @@
             carousel.addEventListener('mouseleave', startAutoPlay);
 
             startAutoPlay();
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+
+        function openLightbox(carousel, index) {
+            const images = carousel.querySelectorAll('.carousel-image');
+            currentLightboxImages = Array.from(images).map(img => img.src);
+            currentLightboxIndex = index;
+            updateLightboxImage();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function updateLightboxImage() {
+            lightboxImage.src = currentLightboxImages[currentLightboxIndex];
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+        }
+
+        function lightboxPrevImage() {
+            currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+            updateLightboxImage();
+        }
+
+        function lightboxNextImage() {
+            currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+            updateLightboxImage();
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', lightboxPrevImage);
+        lightboxNext.addEventListener('click', lightboxNextImage);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lightboxPrevImage();
+            if (e.key === 'ArrowRight') lightboxNextImage();
         });
 
         // Internationalization (i18n)
@@ -1075,7 +1349,7 @@
                 'projects.demo': 'Ver Demo',
                 'projects.viewGithub': 'Ver no GitHub',
                 'hobbies.title': 'Hobbies & Interesses',
-                'hobbies.translations': 'Traduções Crowdin',
+                'hobbies.translations': 'Traduções',
                 'hobbies.satisfactory.desc': 'Tradutor oficial do jogo Satisfactory para português. Nome presente nos créditos oficiais do jogo.',
                 'hobbies.satisfactory.badge': 'Nos Créditos Como RivoDani',
                 'hobbies.satisfactory.link': 'Ver Créditos →',
@@ -1115,7 +1389,7 @@
                 'projects.demo': 'View Demo',
                 'projects.viewGithub': 'View on GitHub',
                 'hobbies.title': 'Hobbies & Interests',
-                'hobbies.translations': 'Crowdin Translations',
+                'hobbies.translations': 'Translations',
                 'hobbies.satisfactory.desc': 'Official translator for Satisfactory game to Portuguese. Name featured in the official game credits.',
                 'hobbies.satisfactory.badge': 'In Credits As RivoDani',
                 'hobbies.satisfactory.link': 'View Credits →',
