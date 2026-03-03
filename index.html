@@ -18,6 +18,8 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 250 250'%3E%3Cpath fill='%23fff' d='M150.84,142.75c-.88,7.8-2.19,15.1-2.27,22.89l-.23,23.18c-.02,2.35-2.28,4.67-4.28,4.96-2.22.32-5.01-1.72-5.18-4.29l-.77-11.88c-.7-10.83,1.25-21.15,2.2-32.36-26.17,7.64-52.07,14.92-75.28,28.33l-34.92,20.16c-2.52,1.46-5.54.83-7.03-1.06-1.83-2.33-1.13-5.79,1.58-7.37l23.97-14.06c6.29-3.69,12.45-6.88,18.98-10.18.1-4.11-.09-8.33.36-12.41,2.23-20.24,5.06-39.85,8.58-59.87.78-4.46,1.21-8.28,1.41-13.36-11.06,3.16-21.02,6.19-30.45,11.8l-16.57,9.86-6.8,4.21c-2.66,1.65-5.86,1.15-7.65-1.27-1.69-2.28-1-5.84,1.89-7.54l19.71-11.55c24.64-14.44,64.9-23.31,93.31-25.47,2.79-.21,5.41.82,6.2,3.46.74,2.5-1.22,5.65-4.35,5.85-17.96,1.14-27.86,3.59-45.26,7.52.19,5.97-.27,10.79-1.08,16.42-4.02,22.52-7.52,44.62-9.8,68.3,21.88-8.85,42.5-16.33,64.82-21.88,2.2-12,4.86-23.53,8.59-35.26,4.25-11.66,10.18-22.26,19.14-30.8,3.6-3.43,9.56-8.17,13.9-4.78,1.09.85,2.43,3.2,2.54,4.87l1.36,21.21c.79,12.31,3.7,24.21,5.95,36.35l22.09-1.78c1.97-.16,4.07,2.3,4.23,3.79.23,2.09-1.25,5.02-3.67,5.25l-20.5,1.91c1.06,6.71,16.16,61.32,2.75,58-2.15-.53-3.82-2.62-3.4-5.01,1.89-10.74-5.52-39.45-8.28-52.02-12.08,1.32-23.64,3.31-35.77,5.87ZM152.59,132.59l31.83-5.05c-2.43-11.88-4.64-23.65-6.23-35.65l-1-16.29c-15.93,13.52-20.76,37.38-24.6,56.99Z'/%3E%3Cellipse fill='%23fff' cx='229.28' cy='130.35' rx='5.14' ry='5.13'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://github.com" crossorigin>
+    <link rel="preconnect" href="https://github.githubassets.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=National+Park:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -360,8 +362,16 @@
             max-width: 100%;
             max-height: 85vh;
             object-fit: contain;
+            display: block;
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-content svg.lightbox-image {
+            width: auto;
+            height: 85vh;
+            max-width: 100%;
+            max-height: 85vh;
         }
 
         .lightbox-close {
@@ -864,10 +874,17 @@
             </div>
 
             <div class="project-card">
-                <div class="project-image" style="display: flex; align-items: center; justify-content: center; background: transparent;">
-                    <svg width="80%" height="80%" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: #e2e8f0;">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
+                <div class="project-carousel" data-carousel="discordpa">
+                    <div class="carousel-images">
+                        <svg class="carousel-image" viewBox="0 0 432.8 374.26" xmlns="http://www.w3.org/2000/svg"><path fill="#5865f2" d="M320.07,23.89C295.97,12.83,270.13,4.69,243.11.02c-.49-.09-.98.13-1.24.59-3.32,5.91-7,13.62-9.58,19.68-29.06-4.35-57.97-4.35-86.44,0-2.58-6.2-6.39-13.77-9.73-19.68-.25-.44-.75-.66-1.24-.59-27,4.65-52.85,12.8-76.96,23.87-.21.09-.39.24-.51.44C8.4,97.55-5.02,168.98,1.56,239.53c.03.35.22.68.49.89,32.34,23.75,63.67,38.17,94.41,47.72.49.15,1.01-.03,1.33-.44,7.27-9.93,13.76-20.4,19.31-31.42.33-.64.01-1.41-.66-1.67-10.28-3.9-20.07-8.66-29.49-14.06-.75-.44-.8-1.5-.12-2.01,1.98-1.49,3.96-3.03,5.86-4.59.34-.28.82-.35,1.22-.17,61.88,28.25,128.87,28.25,190.01,0,.4-.19.88-.13,1.24.15,1.89,1.56,3.88,3.12,5.87,4.61.69.51.64,1.58-.1,2.01-9.42,5.51-19.21,10.16-29.51,14.04-.67.26-.97,1.04-.64,1.68,5.68,11,12.16,21.47,19.3,31.4.3.42.83.6,1.33.45,30.89-9.56,62.22-23.97,94.56-47.72.28-.21.46-.53.49-.87,7.88-81.56-13.2-152.4-55.9-215.2-.1-.21-.28-.36-.49-.45ZM126.35,196.57c-18.63,0-33.98-17.1-33.98-38.11s15.05-38.11,33.98-38.11,34.28,17.25,33.98,38.11c0,21-15.05,38.11-33.98,38.11ZM251.98,196.57c-18.63,0-33.98-17.1-33.98-38.11s15.05-38.11,33.98-38.11,34.28,17.25,33.98,38.11c0,21-14.9,38.11-33.98,38.11Z"></path><path fill="#0000c8" d="M282.87,354.63c-1.81,14.45-14.99,19.63-29.44,19.63s-24.7-11.72-22.9-26.17l6.54-58.88c1.81-14.45,14.99-26.17,29.44-26.17s42.31,0,22.9,26.17c-19.42,26.17-6.54,65.42-6.54,65.42Z"></path><path fill="#ccd6dd" d="M432.8,249.96c0,45.15-10.1,81.77-22.57,81.77s-133.78-36.62-133.78-81.77,121.32-81.77,133.78-81.77,22.57,36.62,22.57,81.77Z"></path><ellipse fill="#66757f" cx="410.23" cy="249.96" rx="22.57" ry="81.77"></ellipse><path fill="#2538ff" d="M315.69,295.76l-91.59-6.54c-32.71,0-32.71-78.5,0-78.5l91.59-6.54c-19.63,19.63-19.63,71.96,0,91.59Z"></path><ellipse fill="#99aab5" cx="403.36" cy="249.96" rx="9.81" ry="28.44"></ellipse></svg>
+                        <img src="https://github.com/user-attachments/assets/a56515de-55e9-45ea-819a-73e5543ed9c1" alt="Discord-PA Screenshot" class="carousel-image">
+                    </div>
+                    <button class="carousel-arrow prev"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="carousel-arrow next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="carousel-controls">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                    </div>
                 </div>
                 <div class="project-content">
                     <h3>Discord-PA</h3>
@@ -1303,17 +1320,49 @@
 
         // Lightbox functionality
         const lightbox = document.getElementById('lightbox');
-        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxContent = lightbox.querySelector('.lightbox-content');
         const lightboxClose = document.getElementById('lightbox-close');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
         const lightboxCounter = document.getElementById('lightbox-counter');
-        let currentLightboxImages = [];
+        let currentLightboxItems = [];
         let currentLightboxIndex = 0;
 
+        function renderLightboxItem(element) {
+            lightboxContent.innerHTML = '';
+
+            if (element.tagName && element.tagName.toLowerCase() === 'img') {
+                const image = document.createElement('img');
+                image.src = element.src;
+                image.alt = 'Lightbox Image';
+                image.className = 'lightbox-image';
+                image.id = 'lightbox-image';
+                lightboxContent.appendChild(image);
+                return;
+            }
+
+            if (element.tagName && element.tagName.toLowerCase() === 'svg') {
+                const svg = element.cloneNode(true);
+                svg.classList.remove('carousel-image');
+                svg.removeAttribute('style');
+                svg.classList.add('lightbox-image');
+                svg.setAttribute('aria-label', 'Lightbox Image');
+
+                const viewBox = svg.getAttribute('viewBox');
+                if (viewBox && !svg.getAttribute('width') && !svg.getAttribute('height')) {
+                    const parts = viewBox.trim().split(/\s+/);
+                    if (parts.length === 4) {
+                        svg.setAttribute('width', parts[2]);
+                        svg.setAttribute('height', parts[3]);
+                    }
+                }
+
+                lightboxContent.appendChild(svg);
+            }
+        }
+
         function openLightbox(carousel, index) {
-            const images = carousel.querySelectorAll('.carousel-image');
-            currentLightboxImages = Array.from(images).map(img => img.src);
+            currentLightboxItems = Array.from(carousel.querySelectorAll('.carousel-image'));
             currentLightboxIndex = index;
             updateLightboxImage();
             lightbox.classList.add('active');
@@ -1326,17 +1375,17 @@
         }
 
         function updateLightboxImage() {
-            lightboxImage.src = currentLightboxImages[currentLightboxIndex];
-            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+            renderLightboxItem(currentLightboxItems[currentLightboxIndex]);
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxItems.length}`;
         }
 
         function lightboxPrevImage() {
-            currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+            currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxItems.length) % currentLightboxItems.length;
             updateLightboxImage();
         }
 
         function lightboxNextImage() {
-            currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+            currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxItems.length;
             updateLightboxImage();
         }
 
