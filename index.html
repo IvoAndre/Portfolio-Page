@@ -1445,6 +1445,7 @@
 
         function setLanguage(lang) {
             currentLang = lang;
+            document.documentElement.lang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
@@ -1469,15 +1470,52 @@
         // Language switcher event listeners
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                setLanguage(btn.dataset.lang);
+                setLanguage(btn.dataset.lang, true);
             });
         });
 
-        // Load saved language preference
-        const savedLang = localStorage.getItem('portfolio-lang');
-        if (savedLang) {
-            setLanguage(savedLang);
+        // Get language from URL parameter, localStorage, or browser preference
+        function getInitialLanguage() {
+            // 1. Check URL parameter ?l=pt or ?l=en
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLang = urlParams.get('l');
+            if (urlLang === 'pt' || urlLang === 'en') {
+                return urlLang;
+            }
+
+            // 2. Check localStorage
+            const savedLang = localStorage.getItem('portfolio-lang');
+            if (savedLang) {
+                return savedLang;
+            }
+
+            // 3. Detect browser language
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.startsWith('pt')) {
+                return 'pt';
+            }
+            return 'en';
         }
+
+        // Update URL with language parameter
+        function updateUrlLang(lang) {
+            const url = new URL(window.location);
+            url.searchParams.set('l', lang);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Modified setLanguage to optionally update URL
+        const originalSetLanguage = setLanguage;
+        setLanguage = function(lang, updateUrl = false) {
+            originalSetLanguage(lang);
+            if (updateUrl) {
+                updateUrlLang(lang);
+            }
+        };
+
+        // Initialize language
+        const initialLang = getInitialLanguage();
+        setLanguage(initialLang, true);
     </script>
 </body>
 </html>
