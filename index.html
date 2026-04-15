@@ -442,6 +442,136 @@
             border-radius: 20px;
         }
 
+        /* Email Fallback Modal */
+        .email-fallback-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .email-fallback-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .email-fallback-content {
+            background: rgba(18, 18, 18, 0.98);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .email-fallback-content h2 {
+            font-family: 'National Park', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 15px;
+        }
+
+        .email-fallback-content p {
+            color: #cbd5e1;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .email-fallback-group {
+            margin-bottom: 20px;
+        }
+
+        .email-fallback-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .email-fallback-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .email-fallback-text {
+            flex: 1;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .email-fallback-copy-btn {
+            background: rgba(59, 130, 246, 0.8);
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-width: 20%;
+        }
+
+        .email-fallback-copy-btn:hover {
+            background: #3b82f6;
+            transform: scale(1.05);
+        }
+
+        .email-fallback-copy-btn.copied {
+            background: #10b981;
+        }
+
+        .email-fallback-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.8);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .email-fallback-close:hover {
+            background: #3b82f6;
+            transform: scale(1.02);
+        }
+
         .project-content {
             padding: 28px;
             flex: 1;
@@ -1001,6 +1131,32 @@
         <div class="lightbox-counter" id="lightbox-counter">1 / 2</div>
     </div>
 
+    <!-- Email Fallback Modal -->
+    <div class="email-fallback-modal" id="email-fallback-modal">
+        <div class="email-fallback-content">
+            <h2 data-i18n="email.fallback.title">Contacte-me via Email</h2>
+            <p data-i18n="email.fallback.desc">Parece que não tem um cliente de email configurado. Pode copiar os dados abaixo:</p>
+            
+            <div class="email-fallback-group">
+                <label class="email-fallback-label" data-i18n="email.fallback.email">Email:</label>
+                <div class="email-fallback-item">
+                    <span class="email-fallback-text" id="email-fallback-address">ivo.daniel.andre@gmail.com</span>
+                    <button class="email-fallback-copy-btn" id="copy-email-btn" data-i18n="email.fallback.copy">Copiar</button>
+                </div>
+            </div>
+
+            <div class="email-fallback-group">
+                <label class="email-fallback-label" data-i18n="email.fallback.subject">Assunto:</label>
+                <div class="email-fallback-item">
+                    <span class="email-fallback-text" id="email-fallback-subject"></span>
+                    <button class="email-fallback-copy-btn" id="copy-subject-btn" data-i18n="email.fallback.copy">Copiar</button>
+                </div>
+            </div>
+
+            <button class="email-fallback-close" id="email-fallback-close" data-i18n="email.fallback.close">Fechar</button>
+        </div>
+    </div>
+
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
@@ -1446,7 +1602,14 @@
                 'contact.title': 'Vamos Trabalhar Juntos?',
                 'contact.desc': 'Estou sempre aberto a novos projetos e colaborações. Se tens alguma ideia ou apenas queres dizer olá, não hesites em contactar-me!',
                 'contact.cta': 'Enviar Email',
-                'email.subject': 'Contacto via Portfólio: <Insira o seu assunto aqui>'
+                'email.subject': 'Contacto via Portfólio: <Insira o seu assunto aqui>',
+                'email.fallback.title': 'Contacto via Email',
+                'email.fallback.desc': 'Parece que não tem um cliente de email configurado, pode copiar os dados abaixo:',
+                'email.fallback.email': 'Email:',
+                'email.fallback.subject': 'Assunto:',
+                'email.fallback.copy': 'Copiar',
+                'email.fallback.copied': 'Copiado!',
+                'email.fallback.close': 'Fechar'
             },
             en: {
                 'nav.home': 'Home',
@@ -1486,7 +1649,14 @@
                 'contact.title': "Let's Work Together?",
                 'contact.desc': "I'm always open to new projects and collaborations. If you have an idea or just want to say hello, don't hesitate to contact me!",
                 'contact.cta': 'Send Email',
-                'email.subject': 'Contact via Portfolio: <Enter your subject here>'
+                'email.subject': 'Contact via Portfolio: <Enter your subject here>',
+                'email.fallback.title': 'Contact via Email',
+                'email.fallback.desc': 'It seems you don\'t have an email client configured, you can copy the information below:',
+                'email.fallback.email': 'Email:',
+                'email.fallback.subject': 'Subject:',
+                'email.fallback.copy': 'Copy',
+                'email.fallback.copied': 'Copied!',
+                'email.fallback.close': 'Close'
             }
         };
 
@@ -1507,6 +1677,10 @@
             const subject = encodeURIComponent(translations[lang]['email.subject']);
             emailBtn.href = `mailto:ivo.daniel.andre@gmail.com?subject=${subject}`;
 
+            // Update email fallback modal subject
+            const emailFallbackSubject = document.getElementById('email-fallback-subject');
+            emailFallbackSubject.textContent = translations[lang]['email.subject'];
+
             // Update active button
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -1515,6 +1689,70 @@
             // Save preference
             localStorage.setItem('portfolio-lang', lang);
         }
+
+        // Email Fallback Modal Handler
+        const emailBtn = document.getElementById('email-btn');
+        const fallbackModal = document.getElementById('email-fallback-modal');
+        const emailFallbackClose = document.getElementById('email-fallback-close');
+        const copyEmailBtn = document.getElementById('copy-email-btn');
+        const copySubjectBtn = document.getElementById('copy-subject-btn');
+        const emailFallbackAddress = document.getElementById('email-fallback-address');
+        const emailFallbackSubject = document.getElementById('email-fallback-subject');
+
+        function closeFallbackModal() {
+            fallbackModal.classList.remove('active');
+            // Reset copy buttons
+            copyEmailBtn.classList.remove('copied');
+            copySubjectBtn.classList.remove('copied');
+        }
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                button.classList.add('copied');
+                const originalText = button.getAttribute('data-i18n');
+                button.textContent = translations[document.documentElement.lang || 'pt']['email.fallback.copied'] || 'Copiado!';
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.textContent = translations[document.documentElement.lang || 'pt']['email.fallback.copy'] || 'Copiar';
+                }, 2000);
+            }).catch(() => {
+                alert('Erro ao copiar para a área de transferência.');
+            });
+        }
+
+        emailBtn.addEventListener('click', (e) => {
+            const timeoutId = setTimeout(() => {
+                // If we reach here, the mailto handler likely failed
+                e.preventDefault();
+                fallbackModal.classList.add('active');
+            }, 5000);
+
+            // Clear timeout if the email handler worked
+            window.addEventListener('focus', () => {
+                clearTimeout(timeoutId);
+            }, { once: true });
+        });
+
+        emailFallbackClose.addEventListener('click', closeFallbackModal);
+
+        fallbackModal.addEventListener('click', (e) => {
+            if (e.target === fallbackModal) {
+                closeFallbackModal();
+            }
+        });
+
+        copyEmailBtn.addEventListener('click', () => {
+            copyToClipboard(emailFallbackAddress.textContent, copyEmailBtn);
+        });
+
+        copySubjectBtn.addEventListener('click', () => {
+            copyToClipboard(emailFallbackSubject.textContent, copySubjectBtn);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!fallbackModal.classList.contains('active')) return;
+            if (e.key === 'Escape') closeFallbackModal();
+        });
 
         // Language switcher event listeners
         document.querySelectorAll('.lang-btn').forEach(btn => {
