@@ -838,6 +838,7 @@
             animation: none;
             opacity: 1;
             cursor: pointer;
+            border: none;
         }
 
         .contact-form-status {
