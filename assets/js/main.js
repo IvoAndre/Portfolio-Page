@@ -335,6 +335,125 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
 
     let currentIndex = 0;
     let isHovered = false;
+    let suppressImageClickUntil = 0;
+    let dragState = {
+        active: false,
+        pointerId: null,
+        startX: 0,
+        startY: 0,
+        deltaX: 0,
+        horizontalLock: false
+    };
+
+    function setTrackTransitionEnabled(enabled) {
+        images.style.transition = enabled ? '' : 'none';
+    }
+
+    function getCarouselWidth() {
+        return carousel.getBoundingClientRect().width || carousel.clientWidth || 1;
+    }
+
+    function isInteractiveTarget(target) {
+        if (!target || !target.closest) return false;
+        return Boolean(target.closest('.carousel-arrow, .carousel-dot, a, button, input, textarea, select, label'));
+    }
+
+    function resetDragState() {
+        dragState = {
+            active: false,
+            pointerId: null,
+            startX: 0,
+            startY: 0,
+            deltaX: 0,
+            horizontalLock: false
+        };
+        carousel.classList.remove('is-dragging');
+        isHovered = carousel.matches(':hover');
+    }
+
+    function finishDrag(commitSwipe) {
+        if (!dragState.active) return;
+
+        const swipeThreshold = Math.max(40, getCarouselWidth() * 0.12);
+        const shouldChangeSlide =
+            commitSwipe && dragState.horizontalLock && Math.abs(dragState.deltaX) >= swipeThreshold;
+
+        setTrackTransitionEnabled(true);
+
+        if (shouldChangeSlide) {
+            if (dragState.deltaX < 0) {
+                carouselObj.nextSlide(true);
+            } else {
+                carouselObj.prevSlide();
+            }
+            suppressImageClickUntil = Date.now() + 350;
+        } else {
+            carouselObj.goToSlide(currentIndex);
+        }
+
+        if (
+            dragState.pointerId !== null
+            && typeof carousel.releasePointerCapture === 'function'
+            && carousel.hasPointerCapture(dragState.pointerId)
+        ) {
+            carousel.releasePointerCapture(dragState.pointerId);
+        }
+
+        resetDragState();
+    }
+
+    function onPointerDown(event) {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        if (isInteractiveTarget(event.target)) return;
+
+        dragState.active = true;
+        dragState.pointerId = event.pointerId;
+        dragState.startX = event.clientX;
+        dragState.startY = event.clientY;
+        dragState.deltaX = 0;
+        dragState.horizontalLock = false;
+        isHovered = true;
+
+        if (typeof carousel.setPointerCapture === 'function') {
+            carousel.setPointerCapture(event.pointerId);
+        }
+    }
+
+    function onPointerMove(event) {
+        if (!dragState.active) return;
+        if (dragState.pointerId !== null && event.pointerId !== dragState.pointerId) return;
+
+        const deltaX = event.clientX - dragState.startX;
+        const deltaY = event.clientY - dragState.startY;
+        dragState.deltaX = deltaX;
+
+        if (!dragState.horizontalLock) {
+            const moveThreshold = 8;
+            if (Math.abs(deltaX) < moveThreshold && Math.abs(deltaY) < moveThreshold) return;
+
+            if (Math.abs(deltaY) > Math.abs(deltaX)) {
+                finishDrag(false);
+                return;
+            }
+
+            dragState.horizontalLock = true;
+            carousel.classList.add('is-dragging');
+        }
+
+        setTrackTransitionEnabled(false);
+        const baseOffset = -currentIndex * getCarouselWidth();
+        images.style.transform = `translateX(${baseOffset + deltaX}px)`;
+
+        if (event.cancelable) {
+            event.preventDefault();
+        }
+    }
+
+    function onPointerUp(event) {
+        if (!dragState.active) return;
+        if (dragState.pointerId !== null && event.pointerId !== dragState.pointerId) return;
+        finishDrag(true);
+    }
 
     const section = carousel.closest('section');
     const category = section ? section.id : 'default';
@@ -401,6 +520,12 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
         isHovered = false;
     });
 
+    carousel.addEventListener('pointerdown', onPointerDown);
+    carousel.addEventListener('pointermove', onPointerMove);
+    carousel.addEventListener('pointerup', onPointerUp);
+    carousel.addEventListener('pointercancel', () => finishDrag(false));
+    carousel.addEventListener('lostpointercapture', () => finishDrag(false));
+
     carousel.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') {
             event.preventDefault();
@@ -447,7 +572,16 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
 
     imageElements.forEach((img, index) => {
         img.style.cursor = 'pointer';
-        img.addEventListener('click', () => {
+        img.addEventListener('dragstart', (event) => {
+            event.preventDefault();
+        });
+
+        img.addEventListener('click', (event) => {
+            if (Date.now() < suppressImageClickUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
             openLightbox(carousel, index);
         });
     });
