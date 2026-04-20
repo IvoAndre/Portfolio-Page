@@ -3,25 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfólio - Ivo André</title>
+    <title>Portfólio | Ivo André</title>
+    <meta
+      name="description"
+      id="meta-description"
+      content="Portfólio pessoal de Ivo André com projetos, hobbies e contactos."
+    />
+    <link rel="canonical" id="canonical-url" href="https://portfolio.rivodani.com" />
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Portfolio - Ivo André" />
+    <meta property="og:title" id="og-title" content="Portfólio | Ivo André" />
     <meta
       property="og:description"
-      content="Explore the portfolio of Ivo André, a talented developer showcasing projects and skills."
+      id="og-description"
+      content="Portfólio pessoal de Ivo André com projetos, hobbies e contactos."
     />
     <meta
       property="og:image"
       content="https://github.com/user-attachments/assets/3def7b27-419f-4ebf-ad17-1ab599fa8295"
     />
-    <meta property="og:url" content="https://www.rivodani.com/portfolio" />
+    <meta property="og:url" id="og-url" content="https://portfolio.rivodani.com" />
     <meta property="og:type" content="website" />
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Portfolio - Ivo André" />
+    <meta name="twitter:title" id="twitter-title" content="Portfólio | Ivo André" />
     <meta
       name="twitter:description"
-      content="Explore the portfolio of Ivo André, a talented developer showcasing projects and skills."
+      id="twitter-description"
+      content="Portfólio pessoal de Ivo André com projetos, hobbies e contactos."
     />
     <meta
       name="twitter:image"
@@ -44,6 +52,30 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
+
+    <script type="application/ld+json" id="structured-data">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "name": "Ivo André",
+            "url": "https://portfolio.rivodani.com",
+            "sameAs": [
+              "https://github.com/IvoAndre",
+              "https://www.linkedin.com/in/ivo-andre/"
+            ],
+            "jobTitle": "Software Developer"
+          },
+          {
+            "@type": "WebSite",
+            "name": "Portfólio | Ivo André",
+            "url": "https://portfolio.rivodani.com",
+            "inLanguage": ["pt", "en"]
+          }
+        ]
+      }
+    </script>
 
     <link rel="stylesheet" href="assets/css/main.css" />
   </head>
@@ -92,10 +124,12 @@
       </div>
     </nav>
 
+    <div id="i18n-alert" class="i18n-alert" role="status" aria-live="polite" hidden></div>
+
     <!-- Hero Section -->
     <section id="hero">
       <div class="hero-content">
-        <h1 data-i18n="hero.title">Olá, sou o Ivo André</h1>
+        <h1 data-i18n="hero.title">Olá, sou Ivo André</h1>
         <p>Software Developer</p>
         <a href="#projects" class="cta-button" data-i18n="hero.cta"
           >Ver Projetos</a
@@ -133,16 +167,32 @@
         <div class="project-card">
           <div class="project-carousel" data-carousel="politicapt">
             <div class="carousel-images">
-              <img
-                src="assets/images/politicapt-logo.png"
-                alt="PolíticaPT Logo"
-                class="carousel-image"
-              />
-              <img
-                src="assets/images/politicapt-print.png"
-                alt="PolíticaPT Screenshot"
-                class="carousel-image"
-              />
+              <picture>
+                <source srcset="assets/images/politicapt-logo.avif" type="image/avif" />
+                <source srcset="assets/images/politicapt-logo.webp" type="image/webp" />
+                <img
+                  src="assets/images/politicapt-logo.png"
+                  alt="PolíticaPT Logo"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="900"
+                />
+              </picture>
+              <picture>
+                <source srcset="assets/images/politicapt-print.avif" type="image/avif" />
+                <source srcset="assets/images/politicapt-print.webp" type="image/webp" />
+                <img
+                  src="assets/images/politicapt-print.png"
+                  alt="PolíticaPT Screenshot"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                />
+              </picture>
             </div>
             <button class="carousel-arrow prev">
               <i class="fa-solid fa-chevron-left"></i>
@@ -187,16 +237,44 @@
         <div class="project-card">
           <div class="project-carousel" data-carousel="unavailable">
             <div class="carousel-images">
-              <img
-                src="assets/images/politicapt-servicoindisponivel-logo.png"
-                alt="PolíticaPT UnavailablePage Screenshot 1"
-                class="carousel-image"
-              />
-              <img
-                src="assets/images/politicapt-servicoindisponivel-print.png"
-                alt="PolíticaPT UnavailablePage Screenshot 2"
-                class="carousel-image"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/politicapt-servicoindisponivel-logo.avif"
+                  type="image/avif"
+                />
+                <source
+                  srcset="assets/images/politicapt-servicoindisponivel-logo.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/politicapt-servicoindisponivel-logo.png"
+                  alt="PolíticaPT UnavailablePage Screenshot 1"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="900"
+                />
+              </picture>
+              <picture>
+                <source
+                  srcset="assets/images/politicapt-servicoindisponivel-print.avif"
+                  type="image/avif"
+                />
+                <source
+                  srcset="assets/images/politicapt-servicoindisponivel-print.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/politicapt-servicoindisponivel-print.png"
+                  alt="PolíticaPT UnavailablePage Screenshot 2"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                />
+              </picture>
             </div>
             <button class="carousel-arrow prev">
               <i class="fa-solid fa-chevron-left"></i>
@@ -237,16 +315,32 @@
         <div class="project-card">
           <div class="project-carousel" data-carousel="visumaker">
             <div class="carousel-images">
-              <img
-                src="assets/images/visumaker-logo.png"
-                alt="VisuMaker Logo"
-                class="carousel-image"
-              />
-              <img
-                src="assets/images/visumaker-print.png"
-                alt="VisuMaker Screenshot"
-                class="carousel-image"
-              />
+              <picture>
+                <source srcset="assets/images/visumaker-logo.avif" type="image/avif" />
+                <source srcset="assets/images/visumaker-logo.webp" type="image/webp" />
+                <img
+                  src="assets/images/visumaker-logo.png"
+                  alt="VisuMaker Logo"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="900"
+                />
+              </picture>
+              <picture>
+                <source srcset="assets/images/visumaker-print.avif" type="image/avif" />
+                <source srcset="assets/images/visumaker-print.webp" type="image/webp" />
+                <img
+                  src="assets/images/visumaker-print.png"
+                  alt="VisuMaker Screenshot"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                />
+              </picture>
             </div>
             <button class="carousel-arrow prev">
               <i class="fa-solid fa-chevron-left"></i>
@@ -318,11 +412,19 @@
                   ry="28.44"
                 ></ellipse>
               </svg>
-              <img
-                src="assets/images/discordpa-print.png"
-                alt="Discord-PA Screenshot"
-                class="carousel-image"
-              />
+              <picture>
+                <source srcset="assets/images/discordpa-print.avif" type="image/avif" />
+                <source srcset="assets/images/discordpa-print.webp" type="image/webp" />
+                <img
+                  src="assets/images/discordpa-print.png"
+                  alt="Discord-PA Screenshot"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                />
+              </picture>
             </div>
             <button class="carousel-arrow prev">
               <i class="fa-solid fa-chevron-left"></i>
@@ -359,16 +461,32 @@
         <div class="project-card">
           <div class="project-carousel" data-carousel="prsportugal">
             <div class="carousel-images">
-              <img
-                src="assets/images/prsportugal-logo.png"
-                alt="PRS Portugal Logo"
-                class="carousel-image"
-              />
-              <img
-                src="assets/images/prsportugal-print.png"
-                alt="PRS Portugal Screenshot"
-                class="carousel-image"
-              />
+              <picture>
+                <source srcset="assets/images/prsportugal-logo.avif" type="image/avif" />
+                <source srcset="assets/images/prsportugal-logo.webp" type="image/webp" />
+                <img
+                  src="assets/images/prsportugal-logo.png"
+                  alt="PRS Portugal Logo"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="900"
+                />
+              </picture>
+              <picture>
+                <source srcset="assets/images/prsportugal-print.avif" type="image/avif" />
+                <source srcset="assets/images/prsportugal-print.webp" type="image/webp" />
+                <img
+                  src="assets/images/prsportugal-print.png"
+                  alt="PRS Portugal Screenshot"
+                  class="carousel-image"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                />
+              </picture>
             </div>
             <button class="carousel-arrow prev">
               <i class="fa-solid fa-chevron-left"></i>
@@ -711,13 +829,81 @@
           Estou sempre aberto a novos projetos e colaborações. Se tens alguma
           ideia ou apenas queres dizer olá, não hesites em contactar-me!
         </p>
-        <a
-          href="mailto:ivo.daniel.andre@gmail.com?subject=Contacto%20via%20Portf%C3%B3lio%3A%20%3CInsira%20o%20seu%20assunto%20aqui%3E"
-          class="cta-button"
-          id="email-btn"
-          data-i18n="contact.cta"
-          >Enviar Email</a
-        >
+        <form id="contact-form" class="contact-form" novalidate>
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" id="form-started-at" name="form_started_at" value="" />
+          <label class="contact-label" for="contact-name" data-i18n="contact.form.name.label"
+            >Nome</label
+          >
+          <input
+            id="contact-name"
+            name="name"
+            type="text"
+            required
+            maxlength="80"
+            data-i18n-placeholder="contact.form.name.placeholder"
+            placeholder="O teu nome"
+          />
+
+          <label
+            class="contact-label"
+            for="contact-email"
+            data-i18n="contact.form.email.label"
+            >Email</label
+          >
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            required
+            maxlength="120"
+            data-i18n-placeholder="contact.form.email.placeholder"
+            placeholder="teu@email.com"
+          />
+
+          <label
+            class="contact-label"
+            for="contact-message"
+            data-i18n="contact.form.message.label"
+            >Mensagem</label
+          >
+          <textarea
+            id="contact-message"
+            name="message"
+            required
+            minlength="20"
+            maxlength="3000"
+            data-i18n-placeholder="contact.form.message.placeholder"
+            placeholder="Conta-me sobre o teu projeto"
+          ></textarea>
+
+          <input
+            type="text"
+            id="contact-company"
+            name="company"
+            class="contact-honeypot"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+
+          <button type="submit" class="cta-button contact-submit" data-i18n="contact.form.submit">
+            Enviar Mensagem
+          </button>
+          <p id="contact-form-status" class="contact-form-status" role="status" aria-live="polite"></p>
+
+          <div class="contact-email-alt-row">
+            <span data-i18n="contact.email.altPrompt">Preferes enviar um email?</span>
+            <a
+              href="mailto:ivo.daniel.andre@gmail.com?subject=Contacto%20via%20Portf%C3%B3lio%3A%20%3CInsira%20o%20seu%20assunto%20aqui%3E"
+              class="project-link contact-email-alt"
+              id="email-btn"
+              data-i18n="contact.cta"
+              >Enviar Email</a
+            >
+          </div>
+        </form>
       </div>
     </section>
 
@@ -752,10 +938,20 @@
 
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
-      <button class="lightbox-close" id="lightbox-close">
+      <button
+        type="button"
+        class="lightbox-close"
+        id="lightbox-close"
+        aria-label="Fechar imagem ampliada"
+      >
         <i class="fa-solid fa-xmark"></i>
       </button>
-      <button class="lightbox-arrow prev" id="lightbox-prev">
+      <button
+        type="button"
+        class="lightbox-arrow prev"
+        id="lightbox-prev"
+        aria-label="Imagem anterior"
+      >
         <i class="fa-solid fa-chevron-left"></i>
       </button>
       <div class="lightbox-content">
@@ -766,7 +962,12 @@
           id="lightbox-image"
         />
       </div>
-      <button class="lightbox-arrow next" id="lightbox-next">
+      <button
+        type="button"
+        class="lightbox-arrow next"
+        id="lightbox-next"
+        aria-label="Próxima imagem"
+      >
         <i class="fa-solid fa-chevron-right"></i>
       </button>
       <div class="lightbox-counter" id="lightbox-counter">1 / 2</div>
