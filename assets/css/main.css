@@ -1035,10 +1035,9 @@ section {
         overflow-x: auto;
         scrollbar-width: none;
         -ms-overflow-style: none;
-        padding-left: 40px;
-        padding-right: 40px;
-        padding-bottom: 2px;
+        padding-bottom: 6px;
         row-gap: 0;
+        
     }
 
     nav.is-scrolled-mobile .nav-links::-webkit-scrollbar {
@@ -1048,7 +1047,27 @@ section {
     nav.is-scrolled-mobile .nav-links a {
         white-space: nowrap;
         font-size: 0.92rem;
+        color: #fff;
+        transition: color 0.3s ease;
     }
+
+    nav.is-scrolled-mobile .nav-links a:hover,
+    nav.is-scrolled-mobile .nav-links a.is-active {
+        color: #60a5fa;
+    }
+
+    nav.is-scrolled-mobile .nav-links a::after {
+        bottom: -3px;
+        opacity: 1;
+        transition: width 0.3s ease, opacity 0.3s ease;
+    }
+
+    nav.is-scrolled-mobile .nav-links a:hover::after,
+    nav.is-scrolled-mobile .nav-links a.is-active::after {
+        width: 100%;
+    }
+
+    
 
     .lang-switcher {
         transition: opacity 0.25s ease, transform 0.25s ease, max-height 0.25s ease, padding 0.25s ease, border-color 0.25s ease;
