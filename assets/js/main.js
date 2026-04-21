@@ -380,7 +380,16 @@ function initActiveNavLinkBySection() {
     });
 }
 
-initActiveNavLinkBySection();
+function runAfterPageLoad(callback) {
+    if (document.readyState === 'complete') {
+        requestAnimationFrame(callback);
+        return;
+    }
+
+    window.addEventListener('load', () => {
+        requestAnimationFrame(callback);
+    }, { once: true });
+}
 
 function initMobileLangSwitcherAutoHide() {
     const langSwitcher = document.querySelector('.lang-switcher');
@@ -423,7 +432,10 @@ function initMobileLangSwitcherAutoHide() {
     updateFromScroll();
 }
 
-initMobileLangSwitcherAutoHide();
+runAfterPageLoad(() => {
+    initActiveNavLinkBySection();
+    initMobileLangSwitcherAutoHide();
+});
 
 if (prefersReducedMotion) {
     document.querySelectorAll('.project-card, .translation-card, .skill-card').forEach((card) => {
