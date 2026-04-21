@@ -283,6 +283,148 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     });
 });
 
+function initActiveNavLinkBySection() {
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+    if (navLinks.length === 0) return;
+
+    const sectionById = new Map();
+    const linkBySectionId = new Map();
+    const visibilityBySectionId = new Map();
+
+    navLinks.forEach((link) => {
+        const sectionId = link.getAttribute('href').replace('#', '');
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        sectionById.set(sectionId, section);
+        linkBySectionId.set(sectionId, link);
+        visibilityBySectionId.set(sectionId, 0);
+    });
+
+    const sections = Array.from(sectionById.values());
+    if (sections.length === 0) return;
+
+    let activeSectionId = '';
+
+    function setActiveSection(sectionId) {
+        if (!sectionId || sectionId === activeSectionId) return;
+        activeSectionId = sectionId;
+
+        navLinks.forEach((link) => {
+            const href = link.getAttribute('href');
+            const isActive = href === `#${sectionId}`;
+            link.classList.toggle('is-active', isActive);
+            link.setAttribute('aria-current', isActive ? 'page' : 'false');
+        });
+    }
+
+    function resolveSectionFromViewportProbe() {
+        const nav = document.querySelector('nav');
+        const navHeight = nav ? nav.getBoundingClientRect().height : 0;
+        const probeY = navHeight + ((window.innerHeight - navHeight) * 0.35);
+
+        let selectedId = sections[0].id;
+
+        sections.forEach((section) => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= probeY) {
+                selectedId = section.id;
+            }
+        });
+
+        const reachedBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+        if (reachedBottom) {
+            selectedId = sections[sections.length - 1].id;
+        }
+
+        return selectedId;
+    }
+
+    function resolveMostVisibleSection() {
+        let bestSectionId = '';
+        let bestRatio = 0;
+
+        visibilityBySectionId.forEach((ratio, sectionId) => {
+            if (ratio > bestRatio) {
+                bestRatio = ratio;
+                bestSectionId = sectionId;
+            }
+        });
+
+        if (bestRatio > 0) {
+            return bestSectionId;
+        }
+
+        return resolveSectionFromViewportProbe();
+    }
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            visibilityBySectionId.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        });
+        setActiveSection(resolveMostVisibleSection());
+    }, {
+        threshold: [0, 0.1, 0.25, 0.4, 0.6, 0.8, 1],
+        rootMargin: '-80px 0px -45% 0px'
+    });
+
+    sections.forEach((section) => sectionObserver.observe(section));
+    setActiveSection(resolveSectionFromViewportProbe());
+
+    window.addEventListener('scroll', () => {
+        setActiveSection(resolveMostVisibleSection());
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+        setActiveSection(resolveMostVisibleSection());
+    });
+}
+
+initActiveNavLinkBySection();
+
+function initMobileLangSwitcherAutoHide() {
+    const langSwitcher = document.querySelector('.lang-switcher');
+    const nav = document.querySelector('nav');
+    if (!langSwitcher || !nav) return;
+
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+    let rafId = null;
+
+    function updateFromScroll() {
+        rafId = null;
+
+        if (!mobileQuery.matches) {
+            langSwitcher.classList.remove('is-hidden-mobile');
+            nav.classList.remove('is-scrolled-mobile');
+            return;
+        }
+
+        const currentScrollY = Math.max(0, window.scrollY);
+        const compactThreshold = 8;
+        const isCompact = currentScrollY > compactThreshold;
+
+        nav.classList.toggle('is-scrolled-mobile', isCompact);
+    }
+
+    function queueScrollUpdate() {
+        if (rafId !== null) return;
+        rafId = requestAnimationFrame(updateFromScroll);
+    }
+
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+
+    if (typeof mobileQuery.addEventListener === 'function') {
+        mobileQuery.addEventListener('change', queueScrollUpdate);
+    } else if (typeof mobileQuery.addListener === 'function') {
+        mobileQuery.addListener(queueScrollUpdate);
+    }
+
+    updateFromScroll();
+}
+
+initMobileLangSwitcherAutoHide();
+
 if (prefersReducedMotion) {
     document.querySelectorAll('.project-card, .translation-card, .skill-card').forEach((card) => {
         card.style.opacity = '1';
@@ -339,6 +481,8 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
     let dragState = {
         active: false,
         pointerId: null,
+        pointerType: '',
+        hasPointerCapture: false,
         startX: 0,
         startY: 0,
         deltaX: 0,
@@ -362,6 +506,8 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
         dragState = {
             active: false,
             pointerId: null,
+            pointerType: '',
+            hasPointerCapture: false,
             startX: 0,
             startY: 0,
             deltaX: 0,
@@ -374,9 +520,11 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
     function finishDrag(commitSwipe) {
         if (!dragState.active) return;
 
+        const hadHorizontalDrag = dragState.horizontalLock;
+
         const swipeThreshold = Math.max(40, getCarouselWidth() * 0.12);
         const shouldChangeSlide =
-            commitSwipe && dragState.horizontalLock && Math.abs(dragState.deltaX) >= swipeThreshold;
+            commitSwipe && hadHorizontalDrag && Math.abs(dragState.deltaX) >= swipeThreshold;
 
         setTrackTransitionEnabled(true);
 
@@ -389,10 +537,14 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
             suppressImageClickUntil = Date.now() + 350;
         } else {
             carouselObj.goToSlide(currentIndex);
+            if (hadHorizontalDrag) {
+                suppressImageClickUntil = Date.now() + 250;
+            }
         }
 
         if (
-            dragState.pointerId !== null
+            dragState.hasPointerCapture
+            && dragState.pointerId !== null
             && typeof carousel.releasePointerCapture === 'function'
             && carousel.hasPointerCapture(dragState.pointerId)
         ) {
@@ -408,20 +560,28 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
 
         dragState.active = true;
         dragState.pointerId = event.pointerId;
+        dragState.pointerType = event.pointerType || '';
+        dragState.hasPointerCapture = false;
         dragState.startX = event.clientX;
         dragState.startY = event.clientY;
         dragState.deltaX = 0;
         dragState.horizontalLock = false;
         isHovered = true;
 
-        if (typeof carousel.setPointerCapture === 'function') {
+        if (dragState.pointerType !== 'mouse' && typeof carousel.setPointerCapture === 'function') {
             carousel.setPointerCapture(event.pointerId);
+            dragState.hasPointerCapture = true;
         }
     }
 
     function onPointerMove(event) {
         if (!dragState.active) return;
         if (dragState.pointerId !== null && event.pointerId !== dragState.pointerId) return;
+
+        if (dragState.pointerType === 'mouse' && (event.buttons & 1) !== 1) {
+            finishDrag(false);
+            return;
+        }
 
         const deltaX = event.clientX - dragState.startX;
         const deltaY = event.clientY - dragState.startY;
@@ -453,6 +613,18 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
         if (!dragState.active) return;
         if (dragState.pointerId !== null && event.pointerId !== dragState.pointerId) return;
         finishDrag(true);
+    }
+
+    function onWindowPointerUp(event) {
+        if (!dragState.active) return;
+        if (dragState.pointerId !== null && event.pointerId !== dragState.pointerId) return;
+        finishDrag(true);
+    }
+
+    function onWindowPointerCancel(event) {
+        if (!dragState.active) return;
+        if (dragState.pointerId !== null && event.pointerId !== dragState.pointerId) return;
+        finishDrag(false);
     }
 
     const section = carousel.closest('section');
@@ -524,7 +696,14 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
     carousel.addEventListener('pointermove', onPointerMove);
     carousel.addEventListener('pointerup', onPointerUp);
     carousel.addEventListener('pointercancel', () => finishDrag(false));
+    carousel.addEventListener('pointerleave', () => {
+        if (dragState.active && dragState.pointerType === 'mouse') {
+            finishDrag(false);
+        }
+    });
     carousel.addEventListener('lostpointercapture', () => finishDrag(false));
+    window.addEventListener('pointerup', onWindowPointerUp);
+    window.addEventListener('pointercancel', onWindowPointerCancel);
 
     carousel.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') {
@@ -570,6 +749,13 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
         });
     }
 
+    carousel.addEventListener('click', (event) => {
+        if (Date.now() < suppressImageClickUntil) return;
+        if (isInteractiveTarget(event.target)) return;
+        if (!event.target.closest('.carousel-images, .carousel-image, picture')) return;
+        openLightbox(carousel, carouselObj.getCurrentIndex());
+    });
+
     imageElements.forEach((img, index) => {
         img.style.cursor = 'pointer';
         img.addEventListener('dragstart', (event) => {
@@ -582,6 +768,7 @@ document.querySelectorAll('.project-carousel').forEach((carousel) => {
                 event.stopPropagation();
                 return;
             }
+            event.stopPropagation();
             openLightbox(carousel, index);
         });
     });
