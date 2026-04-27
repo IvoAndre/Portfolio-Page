@@ -1134,11 +1134,11 @@ section {
     }
 
     .lightbox-arrow.next {
-        right: 35%;
+        right: 30%;
     }
 
     .lightbox-arrow.prev {
-        left: 35%;
+        left: 30%;
     }
 
     .lightbox-close {
