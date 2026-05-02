@@ -1,4 +1,5 @@
 <img width="2292" height="709" alt="assinatura-01" src="https://github.com/user-attachments/assets/0358fef0-b8c8-41fe-9f75-f1a4e904a96c" />
+
 # Portfolio Page
 
 Portfólio pessoal estático, com foco em apresentação de projetos, hobbies/interesses e contacto.
