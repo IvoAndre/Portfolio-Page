@@ -381,13 +381,19 @@ function initActiveNavLinkBySection() {
 }
 
 function runAfterPageLoad(callback) {
+    const schedule = () => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(callback);
+        });
+    };
+
     if (document.readyState === 'complete') {
-        requestAnimationFrame(callback);
+        schedule();
         return;
     }
 
     window.addEventListener('load', () => {
-        requestAnimationFrame(callback);
+        schedule();
     }, { once: true });
 }
 
