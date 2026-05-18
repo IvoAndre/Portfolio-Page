@@ -332,7 +332,8 @@ function initActiveNavLinkBySection() {
             }
         });
 
-        const reachedBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+        const lastSection = sections[sections.length - 1];
+        const reachedBottom = lastSection.getBoundingClientRect().bottom <= window.innerHeight + 2;
         if (reachedBottom) {
             selectedId = sections[sections.length - 1].id;
         }
