@@ -120,9 +120,15 @@ section {
     position: relative;
 }
 
-#projects {
+#projects,
+#about,
+#hobbies {
     min-height: auto;
     padding: 120px 50px 100px;
+}
+
+.about-section {
+    padding-top: 120px;
 }
 
 .section-title {
@@ -711,10 +717,68 @@ section {
     border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
+.github-button--full {
+    flex: 1;
+}
+
 .github-button:hover {
     background: rgba(59, 130, 246, 0.2);
     border-color: #3b82f6;
     transform: translateY(-2px);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    width: 100%;
+    align-items: stretch;
+}
+
+.about-card {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 18px;
+    padding: 32px;
+    backdrop-filter: blur(10px);
+}
+
+.about-card p {
+    color: #cbd5e1;
+    line-height: 1.8;
+    margin-bottom: 18px;
+}
+
+.about-card--fact h3 {
+    color: #60a5fa;
+    font-family: 'National Park', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.about-list {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+    color: #e2e8f0;
+}
+
+.about-list li {
+    position: relative;
+    padding-left: 18px;
+    line-height: 1.6;
+}
+
+.about-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    background: #3b82f6;
+    border-radius: 50%;
 }
 
 /* Translation Section */
@@ -924,6 +988,20 @@ section {
     backdrop-filter: blur(12px);
 }
 
+.site-footer {
+    text-align: center;
+    padding: 40px 20px 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.site-footer-mark {
+    height: 60px;
+    width: auto;
+    fill: #3b82f6;
+    opacity: 0.7;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     nav {
@@ -1114,7 +1192,8 @@ section {
 
     .projects-grid,
     .translation-grid,
-    .skills-grid {
+    .skills-grid,
+    .about-grid {
         grid-template-columns: 1fr;
     }
 
