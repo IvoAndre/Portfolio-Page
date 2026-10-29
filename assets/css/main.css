@@ -80,6 +80,7 @@ nav {
     display: flex;
     gap: 30px;
     list-style: none;
+    position: relative;
 }
 
 .nav-links a {
@@ -91,22 +92,50 @@ nav {
 
 .nav-links a.is-active {
     color: #60a5fa;
+    anchor-name: --nav-current;
 }
 
-.nav-links a::after {
-    content: '';
+.nav-underline {
     position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
+    display: none;
+    position-anchor: --nav-current;
+    inset-inline-start: anchor(left);
+    inset-block-start: anchor(bottom);
+    inline-size: anchor-size(width);
+    block-size: 2px;
+    min-width: 1px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
     background: #3b82f6;
-    transition: width 0.3s;
+    pointer-events: none;
+    transform: translateY(5px);
+    will-change: inset-inline-start, inset-block-start, inline-size;
+    transition:
+        inset-inline-start 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+        inset-block-start 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+        inline-size 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.nav-links a:hover::after,
-.nav-links a.is-active::after {
-    width: 100%;
+@media (min-width: 769px) {
+    .nav-underline {
+        display: block;
+        left: var(--nav-underline-left, 0px);
+        top: var(--nav-underline-top, 0px);
+        width: var(--nav-underline-width, 1px);
+        inset-inline-start: auto;
+        inset-block-start: auto;
+        inline-size: auto;
+        transition:
+            left 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+            top 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+            width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+    color: #60a5fa;
 }
 
 /* Sections */
@@ -236,7 +265,7 @@ section {
     padding: 0;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(59, 130, 246, 0.15);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -734,6 +763,7 @@ section {
     max-width: 1200px;
     width: 100%;
     align-items: stretch;
+    transition: all 0.3s ease-in;
 }
 
 .about-card {
@@ -742,6 +772,7 @@ section {
     border-radius: 18px;
     padding: 32px;
     backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in;
 }
 
 .about-card p {
@@ -797,7 +828,7 @@ section {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in;
 }
 
 .translation-card:hover {
@@ -836,7 +867,7 @@ section {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in;
 }
 
 .skill-card:hover {
@@ -888,6 +919,7 @@ section {
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 14px;
     padding: 24px;
+    transition: all 0.3s ease-in;
 }
 
 .contact-label {
@@ -1106,21 +1138,30 @@ section {
     }
 
     nav.is-scrolled-mobile .nav-links {
-        width: 100%;
         flex: 0 1 auto;
-        justify-content: center;
+        justify-content: flex-start;
+        align-items: center;
         gap: 12px;
         flex-wrap: nowrap;
+        width: 75vw;
+        max-width: 50vw;
+        min-width: 0;
         overflow-x: auto;
+        overflow-y: hidden;
         scrollbar-width: none;
         -ms-overflow-style: none;
-        padding-bottom: 6px;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 12px;
         row-gap: 0;
-        
     }
 
     nav.is-scrolled-mobile .nav-links::-webkit-scrollbar {
         display: none;
+    }
+
+    nav.is-scrolled-mobile .nav-links li {
+        scroll-snap-align: center;
     }
 
     nav.is-scrolled-mobile .nav-links a {
@@ -1130,27 +1171,10 @@ section {
         transition: color 0.3s ease;
     }
 
-    nav.is-scrolled-mobile .nav-links li:first-child {
-        display: none;
-    }
-
     nav.is-scrolled-mobile .nav-links a:hover,
     nav.is-scrolled-mobile .nav-links a.is-active {
         color: #60a5fa;
     }
-
-    nav.is-scrolled-mobile .nav-links a::after {
-        bottom: -3px;
-        opacity: 1;
-        transition: width 0.3s ease, opacity 0.3s ease;
-    }
-
-    nav.is-scrolled-mobile .nav-links a:hover::after,
-    nav.is-scrolled-mobile .nav-links a.is-active::after {
-        width: 100%;
-    }
-
-    
 
     .lang-switcher {
         transition: opacity 0.25s ease, transform 0.25s ease, max-height 0.25s ease, padding 0.25s ease, border-color 0.25s ease;

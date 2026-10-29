@@ -304,7 +304,55 @@ function initActiveNavLinkBySection() {
     const sections = Array.from(sectionById.values());
     if (sections.length === 0) return;
 
+    const nav = navLinks[0].closest('nav');
+    const navLinksContainer = navLinks[0].closest('.nav-links');
+    const navUnderline = navLinksContainer?.querySelector('.nav-underline');
     let activeSectionId = '';
+    let pendingNavigationTarget = '';
+    let pendingNavigationTimer = null;
+
+    function clearPendingNavigation() {
+        pendingNavigationTarget = '';
+        if (pendingNavigationTimer !== null) {
+            window.clearTimeout(pendingNavigationTimer);
+            pendingNavigationTimer = null;
+        }
+    }
+
+    function beginUserNavigation(sectionId) {
+        clearPendingNavigation();
+        pendingNavigationTarget = sectionId;
+        pendingNavigationTimer = window.setTimeout(clearPendingNavigation, 1200);
+    }
+
+    function updateDesktopUnderline() {
+        if (
+            !navUnderline
+            || window.innerWidth <= 768
+        ) return;
+
+        const activeLink = navLinks.find((link) => link.classList.contains('is-active'));
+        if (!activeLink) return;
+
+        const containerRect = navLinksContainer.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+        navUnderline.style.setProperty('left', `${linkRect.left - containerRect.left}px`);
+        navUnderline.style.setProperty('top', `${linkRect.bottom - containerRect.top + 5}px`);
+        navUnderline.style.setProperty('width', `${linkRect.width}px`);
+    }
+
+    function centerActiveMobileLink() {
+        if (!nav?.classList.contains('is-scrolled-mobile') || !navLinksContainer) return;
+
+        const activeLink = navLinks.find((link) => link.classList.contains('is-active'));
+        if (!activeLink) return;
+
+        activeLink.scrollIntoView({
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            inline: 'center',
+            block: 'nearest'
+        });
+    }
 
     function setActiveSection(sectionId) {
         if (!sectionId || sectionId === activeSectionId) return;
@@ -316,6 +364,9 @@ function initActiveNavLinkBySection() {
             link.classList.toggle('is-active', isActive);
             link.setAttribute('aria-current', isActive ? 'page' : 'false');
         });
+
+        updateDesktopUnderline();
+        centerActiveMobileLink();
     }
 
     function resolveSectionFromViewportProbe() {
@@ -363,6 +414,7 @@ function initActiveNavLinkBySection() {
         entries.forEach((entry) => {
             visibilityBySectionId.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
         });
+        if (pendingNavigationTarget) return;
         setActiveSection(resolveMostVisibleSection());
     }, {
         threshold: [0, 0.1, 0.25, 0.4, 0.6, 0.8, 1],
@@ -372,13 +424,43 @@ function initActiveNavLinkBySection() {
     sections.forEach((section) => sectionObserver.observe(section));
     setActiveSection(resolveSectionFromViewportProbe());
 
+    navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+            const sectionId = link.getAttribute('href')?.replace('#', '');
+            if (!sectionId) return;
+            beginUserNavigation(sectionId);
+            setActiveSection(sectionId);
+        });
+    });
+
+    window.addEventListener('scrollend', clearPendingNavigation, { passive: true });
+
+    if (nav) {
+        const navClassObserver = new MutationObserver(centerActiveMobileLink);
+        navClassObserver.observe(nav, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+
     window.addEventListener('scroll', () => {
+        if (pendingNavigationTarget) return;
         setActiveSection(resolveMostVisibleSection());
     }, { passive: true });
 
     window.addEventListener('resize', () => {
         setActiveSection(resolveMostVisibleSection());
+        updateDesktopUnderline();
+        centerActiveMobileLink();
     });
+
+    window.addEventListener('portfolio-language-change', () => {
+        requestAnimationFrame(() => {
+            updateDesktopUnderline();
+        });
+    });
+
+    updateDesktopUnderline();
 }
 
 function runAfterPageLoad(callback) {
@@ -444,8 +526,10 @@ runAfterPageLoad(() => {
     initMobileLangSwitcherAutoHide();
 });
 
+const animatedContentSelector = '.animated-content';
+
 if (prefersReducedMotion) {
-    document.querySelectorAll('.project-card, .translation-card, .skill-card').forEach((card) => {
+    document.querySelectorAll(animatedContentSelector).forEach((card) => {
         card.style.opacity = '1';
         card.style.transform = 'translateY(0)';
     });
@@ -461,10 +545,10 @@ if (prefersReducedMotion) {
         rootMargin: '0px 0px -100px 0px'
     });
 
-    document.querySelectorAll('.project-card, .translation-card, .skill-card').forEach((card) => {
+    document.querySelectorAll(animatedContentSelector).forEach((card) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(50px)';
-        card.style.transition = 'all 0.6s ease-out';
+        card.style.transition = 'all 0.6s ease-in';
         observer.observe(card);
     });
 }
@@ -1074,6 +1158,8 @@ function setLanguage(lang, updateUrl = false) {
         url.searchParams.set('l', lang);
         window.history.replaceState({}, '', url);
     }
+
+    window.dispatchEvent(new CustomEvent('portfolio-language-change'));
 }
 
 function getInitialLanguage() {
