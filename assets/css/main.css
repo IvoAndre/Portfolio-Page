@@ -1130,7 +1130,7 @@ section {
         transition: color 0.3s ease;
     }
 
-    nav.is-scrolled-mobile .nav-links a[href="#hero"] {
+    nav.is-scrolled-mobile .nav-links li:first-child {
         display: none;
     }
 
