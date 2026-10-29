@@ -1130,9 +1130,9 @@ section {
         transition: color 0.3s ease;
     }
 
-nav.is-scrolled-mobile .nav-links a:first-child {
-  display: none;
-}
+    nav.is-scrolled-mobile .nav-links a[href="#hero"] {
+        display: none;
+    }
 
     nav.is-scrolled-mobile .nav-links a:hover,
     nav.is-scrolled-mobile .nav-links a.is-active {
