@@ -1130,7 +1130,7 @@ section {
         transition: color 0.3s ease;
     }
 
-nav.is-scrolled-mobile .nav-links > a:first-child {
+nav.is-scrolled-mobile .nav-links a:first-child {
   display: none;
 }
 
